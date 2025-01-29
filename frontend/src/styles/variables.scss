@@ -1,0 +1,168 @@
+// Vuetify Variables
+@use 'vuetify/settings' with (
+  $body-font-family: ('Roboto', sans-serif),
+  $border-radius-root: 8px,
+  $color-pack: false
+);
+
+// Custom Variables
+:root {
+  // Colors
+  --primary: #1976D2;
+  --secondary: #424242;
+  --accent: #82B1FF;
+  --error: #FF5252;
+  --info: #2196F3;
+  --success: #4CAF50;
+  --warning: #FB8C00;
+
+  // Dark Theme Colors
+  --dark-primary: #2196F3;
+  --dark-secondary: #424242;
+  --dark-accent: #FF4081;
+  --dark-surface: #121212;
+  
+  // Typography
+  --font-family-base: 'Roboto', sans-serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.5;
+  
+  // Spacing
+  --spacing-unit: 8px;
+  --spacing-xs: calc(var(--spacing-unit) * 0.5);  // 4px
+  --spacing-sm: var(--spacing-unit);               // 8px
+  --spacing-md: calc(var(--spacing-unit) * 2);     // 16px
+  --spacing-lg: calc(var(--spacing-unit) * 3);     // 24px
+  --spacing-xl: calc(var(--spacing-unit) * 4);     // 32px
+  
+  // Borders
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-width: 1px;
+  --border-color: rgba(0, 0, 0, 0.12);
+  
+  // Shadows
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  // Transitions
+  --transition-duration: 0.2s;
+  --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  // Z-indexes
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal-backdrop: 1040;
+  --z-index-modal: 1050;
+  --z-index-popover: 1060;
+  --z-index-tooltip: 1070;
+}
+
+// Dark Theme Override
+.v-theme--dark {
+  --border-color: rgba(255, 255, 255, 0.12);
+  
+  .v-card {
+    --v-theme-surface: var(--dark-surface);
+  }
+}
+
+// Utility Classes
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.transition-base {
+  transition: all var(--transition-duration) var(--transition-timing);
+}
+
+// Text Utilities
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-break {
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+// Flex Utilities
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Spacing Utilities
+.ma-0 { margin: 0 !important; }
+.pa-0 { padding: 0 !important; }
+
+// Position Utilities
+.position-relative { position: relative !important; }
+.position-absolute { position: absolute !important; }
+.position-fixed { position: fixed !important; }
+
+// Custom Scrollbar
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  
+  &:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+.v-theme--dark {
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn var(--transition-duration) var(--transition-timing);
+}
+
+.slide-in-up {
+  animation: slideInUp var(--transition-duration) var(--transition-timing);
+}

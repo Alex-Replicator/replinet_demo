@@ -1,0 +1,109 @@
+version: '3.8'
+
+services:
+  # База данных PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-replinet}
+      POSTGRES_DB: ${POSTGRES_DB:-replinet}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data:cached
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Redis для кэширования и очередей
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data:cached
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Backend API сервис
+  backend:
+    build: 
+      context: ./backend
+      target: development
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app:cached
+      - backend_venv:/app/.venv
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-replinet}@postgres:5432/${POSTGRES_DB:-replinet}
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key}
+      - ENVIRONMENT=development
+      - DEBUG=1
+      - CORS_ORIGINS=http://localhost:3000
+      - PYTHONPATH=/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: >
+      sh -c "poetry run alembic upgrade head &&
+             poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+  # Frontend сервис
+  frontend:
+    build:
+      context: ./frontend
+      target: dev
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app:cached
+      - frontend_node_modules:/app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+      - VITE_WS_URL=ws://localhost:8000/ws
+    depends_on:
+      - backend
+
+  # Управление браузерами для агентов
+  browser-manager:
+    build:
+      context: ./backend
+      target: development
+      dockerfile: Dockerfile
+    command: poetry run python -m app.services.browser_manager
+    volumes:
+      - ./backend:/app:cached
+      - browser_manager_venv:/app/.venv
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - MAX_BROWSERS=5
+      - BROWSER_TIMEOUT=300
+      - CHROMIUM_PATH=/usr/bin/chromium-browser
+    depends_on:
+      redis:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+    name: replinet_postgres_data
+  redis_data:
+    name: replinet_redis_data
+  backend_venv:
+    name: replinet_backend_venv
+  frontend_node_modules:
+    name: replinet_frontend_node_modules
+  browser_manager_venv:
+    name: replinet_browser_manager_venv

@@ -1,0 +1,204 @@
+// Импорт переменных
+@import './variables.scss';
+
+// Reset и базовые стили
+html {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: rgba(var(--v-theme-on-surface), 0.87);
+  background: var(--v-theme-background);
+  transition: background-color var(--transition-duration) var(--transition-timing);
+}
+
+// Основные контейнеры
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.v-application {
+  [class*='text-'] {
+    font-family: var(--font-family-base) !important;
+  }
+}
+
+// Карточки
+.v-card {
+  transition: box-shadow var(--transition-duration) var(--transition-timing);
+  
+  &:hover {
+    box-shadow: var(--shadow-lg);
+  }
+  
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 2rem;
+  }
+}
+
+// Формы
+.v-text-field {
+  &.v-input--dense {
+    .v-field__input {
+      min-height: 40px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+}
+
+// Кнопки
+.v-btn {
+  text-transform: none;
+  letter-spacing: normal;
+  
+  &:not(.v-btn--icon) {
+    padding: 0 var(--spacing-md);
+  }
+  
+  &--pill {
+    border-radius: 24px;
+  }
+  
+  &.v-btn--size-large {
+    min-height: 48px;
+  }
+}
+
+// Списки
+.v-list {
+  &-item {
+    min-height: 48px;
+    
+    &__prepend {
+      margin-right: var(--spacing-md);
+    }
+    
+    &__append {
+      margin-left: var(--spacing-md);
+    }
+  }
+}
+
+// Диалоги
+.v-dialog {
+  .v-card {
+    &__title {
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-bottom: var(--border-width) solid var(--border-color);
+    }
+    
+    &__text {
+      padding: var(--spacing-lg);
+    }
+    
+    &__actions {
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-top: var(--border-width) solid var(--border-color);
+    }
+  }
+}
+
+// Анимации для маршрутов
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--transition-duration) var(--transition-timing);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+// Стили для уведомлений
+.v-snackbar {
+  .v-snackbar__content {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 1rem;
+  }
+  
+  &.success .v-snackbar__content {
+    background-color: var(--success);
+  }
+  
+  &.error .v-snackbar__content {
+    background-color: var(--error);
+  }
+  
+  &.warning .v-snackbar__content {
+    background-color: var(--warning);
+  }
+  
+  &.info .v-snackbar__content {
+    background-color: var(--info);
+  }
+}
+
+// Стили для загрузчика
+.v-progress-circular {
+  margin: var(--spacing-md);
+}
+
+// Пользовательский выбор текста
+::selection {
+  background-color: var(--primary);
+  color: white;
+}
+
+// Утилиты для текста
+.text-no-wrap {
+  white-space: nowrap;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.text-lowercase {
+  text-transform: lowercase;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+// Состояния для элементов
+.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+// Медиа-запросы
+@media (max-width: 600px) {
+  .hidden-sm-and-down {
+    display: none !important;
+  }
+}
+
+@media (min-width: 601px) {
+  .hidden-md-and-up {
+    display: none !important;
+  }
+}
+
+// Печать
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
